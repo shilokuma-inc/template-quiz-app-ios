@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# テンプレートのプロジェクト名（IOSTemplateApp）を新しいアプリ名に一括変更する。
+# テンプレートのプロジェクト名（QuizTemplateApp）を新しいアプリ名に一括変更する。
 #
 # 使い方:
 #   scripts/rename.sh <NewAppName> [owner/repo]
@@ -14,8 +14,8 @@
 #
 set -euo pipefail
 
-OLD_NAME="IOSTemplateApp"
-OLD_REPO="shilokuma-inc/template-app-ios"
+OLD_NAME="QuizTemplateApp"
+OLD_REPO="shilokuma-inc/template-quiz-app-ios"
 
 NEW_NAME="${1:-}"
 if [[ ! "$NEW_NAME" =~ ^[A-Za-z][A-Za-z0-9]*$ ]]; then

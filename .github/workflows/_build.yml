@@ -57,6 +57,11 @@ jobs:
           "$swiftlint" version
           "$swiftlint" lint --strict --reporter github-actions-logging
 
+      - name: Check quiz content
+        # Content/ の CSV を検証し、生成済みの quiz.json が CSV の内容と一致しているか確認する
+        # （CSV だけ更新して scripts/import-quiz.sh の実行を忘れたケースを検出する）
+        run: scripts/import-quiz.sh --check
+
       - name: Build and test
         # UI テストは共有ランナー上で起動待ちに失敗することがあるため、失敗したテストだけ最大 2 回まで再試行する
         run: |

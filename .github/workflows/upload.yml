@@ -18,6 +18,9 @@ concurrency:
 
 jobs:
   upload:
+    # テンプレートリポジトリ自身など、配信しないリポジトリではリポジトリ変数 ENABLE_DELIVERY=false でスキップする。
+    # 変数が未設定のリポジトリ（テンプレートから作成した直後を含む）では従来どおり実行される
+    if: vars.ENABLE_DELIVERY != 'false'
     uses: ./.github/workflows/_archive.yml
     with:
       upload: true

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# テンプレートのプロジェクト名（IOSTemplateApp）を新しいアプリ名に一括変更する。
+# テンプレートのプロジェクト名（QuizTemplateApp）を新しいアプリ名に一括変更する。
 #
 # 使い方:
 #   scripts/rename.sh <NewAppName> [owner/repo]
@@ -9,13 +9,13 @@
 #   owner/repo  README のバッジ URL に使う GitHub リポジトリ。省略時は origin から推定する
 #
 # 実行後に行うこと:
-#   - Configs/Project.xcconfig の DEVELOPMENT_TEAM / APP_BUNDLE_IDENTIFIER を書き換える
+#   - Configs/Project.xcconfig の DEVELOPMENT_TEAM / APP_BUNDLE_IDENTIFIER / APP_DISPLAY_NAME を書き換える
 #   - 差分を確認してコミットする
 #
 set -euo pipefail
 
-OLD_NAME="IOSTemplateApp"
-OLD_REPO="shilokuma-inc/template-app-ios"
+OLD_NAME="QuizTemplateApp"
+OLD_REPO="shilokuma-inc/template-quiz-app-ios"
 
 NEW_NAME="${1:-}"
 if [[ ! "$NEW_NAME" =~ ^[A-Za-z][A-Za-z0-9]*$ ]]; then
@@ -74,5 +74,6 @@ git ls-files -z \
 
 echo
 echo "完了しました。続けて以下を行ってください:"
-echo "  1. Configs/Project.xcconfig の DEVELOPMENT_TEAM と APP_BUNDLE_IDENTIFIER を書き換える"
+echo "  1. Configs/Project.xcconfig の DEVELOPMENT_TEAM / APP_BUNDLE_IDENTIFIER / APP_DISPLAY_NAME を書き換える"
 echo "  2. git diff で差分を確認し、コミットする"
+echo "  3. README の「新しいクイズアプリの作り方」に沿って問題データ・設定・テーマを差し替える"

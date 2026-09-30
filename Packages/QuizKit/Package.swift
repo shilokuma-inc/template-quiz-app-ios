@@ -18,10 +18,15 @@ let package = Package(
     ],
     products: [
         .library(name: "QuizCore", targets: ["QuizCore"]),
+        .library(name: "QuizUI", targets: ["QuizUI"]),
         .executable(name: "quiz-tool", targets: ["QuizTool"]),
     ],
     targets: [
         .target(name: "QuizCore"),
+        .target(
+            name: "QuizUI",
+            dependencies: ["QuizCore"]
+        ),
         .executableTarget(
             name: "QuizTool",
             dependencies: ["QuizCore"]

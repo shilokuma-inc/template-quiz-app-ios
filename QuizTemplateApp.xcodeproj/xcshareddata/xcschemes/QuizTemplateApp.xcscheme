@@ -51,6 +51,16 @@
                ReferencedContainer = "container:QuizTemplateApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "QuizCoreTests"
+               BuildableName = "QuizCoreTests"
+               BlueprintName = "QuizCoreTests"
+               ReferencedContainer = "container:Packages/QuizKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

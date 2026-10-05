@@ -1,9 +1,9 @@
-# IOSTemplateApp
+# QuizTemplateApp
 
-iOS Application Template (SwiftUI)
+Quiz App Template for iOS (SwiftUI)
 
-iOS アプリのリポジトリを新規作成するときの GitHub テンプレートリポジトリです。
-SwiftUI のプロジェクト一式と、ビルド・テスト・Archive・TestFlight 配信までの GitHub Actions ワークフローを含みます。
+クイズアプリを量産するための GitHub テンプレートリポジトリです。
+[template-app-ios](https://github.com/shilokuma-inc/template-app-ios) をベースに、SwiftUI のプロジェクト一式と、ビルド・テスト・Archive・TestFlight 配信までの GitHub Actions ワークフローを含みます。
 
 ## Environment
 
@@ -27,13 +27,13 @@ SwiftUI のプロジェクト一式と、ビルド・テスト・Archive・TestF
       <tr>
         <td style="border:2px double #000080;text-align:left;">main</td>
         <td style="border:2px double #000080;text-align:center;">
-          <a href="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/build.yml?query=branch%3Amain">
-            <img src="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/build.yml/badge.svg?branch=main" alt="Build">
+          <a href="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/build.yml?query=branch%3Amain">
+            <img src="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/build.yml/badge.svg?branch=main" alt="Build">
           </a>
         </td>
         <td style="border:2px double #000080;text-align:center;">
-          <a href="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/archive.yml?query=branch%3Amain">
-            <img src="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/archive.yml/badge.svg?branch=main" alt="Archive">
+          <a href="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/archive.yml?query=branch%3Amain">
+            <img src="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/archive.yml/badge.svg?branch=main" alt="Archive">
           </a>
         </td>
         <td style="border:2px double #000080;text-align:center;">
@@ -42,15 +42,15 @@ SwiftUI のプロジェクト一式と、ビルド・テスト・Archive・TestF
       <tr>
         <td style="border:2px double #000080;text-align:left;">develop</td>
         <td style="border:2px double #000080;text-align:center;">
-          <a href="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/build.yml?query=branch%3Adevelop">
-            <img src="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/build.yml/badge.svg?branch=develop" alt="Build">
+          <a href="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/build.yml?query=branch%3Adevelop">
+            <img src="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/build.yml/badge.svg?branch=develop" alt="Build">
           </a>
         </td>
         <td style="border:2px double #000080;text-align:center;">
         </td>
         <td style="border:2px double #000080;text-align:center;">
-          <a href="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/upload.yml?query=branch%3Adevelop">
-            <img src="https://github.com/shilokuma-inc/template-app-ios/actions/workflows/upload.yml/badge.svg?branch=develop" alt="Upload">
+          <a href="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/upload.yml?query=branch%3Adevelop">
+            <img src="https://github.com/shilokuma-inc/template-quiz-app-ios/actions/workflows/upload.yml/badge.svg?branch=develop" alt="Upload">
           </a>
         </td>
       </tr>
@@ -66,7 +66,7 @@ GitHub の「Use this template」からリポジトリを作成し、clone し�
 
 ### 2. プロジェクト名を変更する
 
-`IOSTemplateApp` を新しいアプリ名に一括変更するスクリプトを用意しています。
+`QuizTemplateApp` を新しいアプリ名に一括変更するスクリプトを用意しています。
 ディレクトリ・`.xcodeproj`・スキーム・ソース内の識別子・README のバッジ URL をまとめて置換します。
 
 ```bash
@@ -112,32 +112,46 @@ API Key は App Store Connect の「ユーザとアクセス → 統合 → App 
 | `develop` | ✅ | | ✅ |
 | `release/**` | ✅ | | ✅ |
 | その他の作業ブランチ | ✅ | | |
+| `assets/**`（スクリーンショット置き場） | | | |
 | Fork からの Pull Request | ✅ | | |
 
 - Upload は Archive → IPA Export を含むため、`develop` / `release/**` では Archive を別途実行しません
+- `assets/**` はアプリのコードを含まないため、どのワークフローも実行しません
+- リポジトリ変数（Settings → Secrets and variables → Actions → Variables）に `ENABLE_DELIVERY=false` を設定すると Archive / Upload をスキップします。テンプレートリポジトリ自身はこの設定で配信を止めています。テンプレートから作成したリポジトリには引き継がれないため、何もしなければ従来どおり実行されます
 - Xcode のバージョンは [.github/workflows/_build.yml](.github/workflows/_build.yml) と [.github/workflows/_archive.yml](.github/workflows/_archive.yml) の `xcode-version` で固定しています。Environment の更新時はあわせて変更してください
+
+### 6. PR 本文のスクリーンショット
+
+UI の見た目が変わる変更では、Before / After のスクリーンショットを PR 本文に添付します。
+
+- 画像は PR の diff を汚さないよう **`assets/issue-<Issue番号>` ブランチ**に置き、PR 本文からは raw URL で参照します
+  - 例: `https://raw.githubusercontent.com/<owner>/<repo>/assets/issue-12/12/before.png`
+  - このブランチは [.github/workflows/cleanup-assets-branch.yml](.github/workflows/cleanup-assets-branch.yml) が PR のマージ時に自動削除します。ブランチ名がこの規約から外れると削除されないので注意してください
+- Before / After は表で横に並べ、同一条件（同じ端末・OS・外観モード・データ状態）で撮影します
+- 影響する画面が複数ある場合は画面ごとに用意します。新規画面で Before が無い場合は「なし」と書きます
 
 ## 構成
 
 ```
 .
-├── Configs/                 # xcconfig（署名情報・バージョン・Deployment Target）
-├── IOSTemplateApp/          # アプリ本体（SwiftUI）
-├── IOSTemplateAppTests/     # Unit テスト（Swift Testing）
-├── IOSTemplateAppUITests/   # UI テスト（XCTest）
-├── IOSTemplateApp.xcodeproj # 共有スキーム IOSTemplateApp を含む
-├── docs/                    # ExportOptions.plist のサンプル
-├── scripts/                 # rename.sh
-├── .swiftlint.yml           # SwiftLint 設定
+├── Configs/                  # xcconfig（署名情報・バージョン・Deployment Target）
+├── QuizTemplateApp/          # アプリ本体（SwiftUI）
+├── QuizTemplateAppTests/     # Unit テスト（Swift Testing）
+├── QuizTemplateAppUITests/   # UI テスト（XCTest）
+├── QuizTemplateApp.xcodeproj # 共有スキーム QuizTemplateApp を含む
+├── docs/                     # ExportOptions.plist のサンプル
+├── scripts/                  # rename.sh
+├── .swiftlint.yml            # SwiftLint 設定
 └── .github/
-    ├── ISSUE_TEMPLATE/      # Issue テンプレート
+    ├── ISSUE_TEMPLATE/       # Issue テンプレート
     ├── pull_request_template.md
     └── workflows/
-        ├── _build.yml       # 共通処理: ビルド + テスト + SwiftLint（workflow_call）
-        ├── _archive.yml     # 共通処理: Archive → Export（→ Upload）（workflow_call）
-        ├── build.yml        # 全ブランチの push / Fork からの PR
-        ├── archive.yml      # main の push
-        └── upload.yml       # develop / release/** の push
+        ├── _build.yml        # 共通処理: ビルド + テスト + SwiftLint（workflow_call）
+        ├── _archive.yml      # 共通処理: Archive → Export（→ Upload）（workflow_call）
+        ├── build.yml         # 全ブランチの push / Fork からの PR
+        ├── archive.yml       # main の push
+        ├── upload.yml        # develop / release/** の push
+        └── cleanup-assets-branch.yml # PR マージ時に assets/issue-<番号> ブランチを削除
 ```
 
 - プロジェクトはフォルダ同期グループ（Xcode 16 以降の形式）で管理しているため、ファイルの追加・削除で pbxproj は変わりません

@@ -5,11 +5,19 @@
 # 「詰まったときの扱い」が書かれていないと無限ループになるので必ず確認する。
 set -euo pipefail
 
+# Git hook や wrapper から継承した経路変数が別のチェックアウトを指すことがある
+unset GIT_DIR GIT_WORK_TREE GIT_COMMON_DIR GIT_INDEX_FILE \
+      GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_PREFIX
+
 PROMISE="${1:-}"
 MAX="${2:-0}"
 # "00" が 0 判定をすり抜けたり、"abc" が Stop hook に弾かれる state を書くのを防ぐ
-[[ "$MAX" =~ ^[0-9]+$ ]] || { echo "max_iterations は 0 以上の整数で指定してください（指定: $MAX）" >&2; exit 1; }
+[[ "$MAX" =~ ^[0-9]+$ ]] || { echo "max_iterations は 0 以上の整数で指定してください（指定: ${MAX}）" >&2; exit 1; }
 MAX=$((10#$MAX))
+# 制御用 worktree のサブディレクトリから実行しても、worktree の直下に state を置く
+# （Stop hook はループの Claude の作業ディレクトリ＝制御用 worktree の直下を見る）
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
 STATE=".claude/ralph-loop.local.md"
 GOAL=".claude/ralph-goal.local.md"
 PLAYBOOK=".claude/ralph-playbook.local.md"
@@ -28,6 +36,14 @@ fi
 
 TASKS=$(grep -c '^- \[ \]' "$GOAL" || true)
 [[ "$TASKS" -gt 0 ]] || { echo "$GOAL に未完了タスクがありません" >&2; exit 1; }
+# goal.template.md の雛形のまま（{{日本語タイトル}} などが残る）でも未完了タスクの数は数えられてしまう。
+# 起動すると STEP A を飛ばして雛形のタスクに着手するので、プレースホルダが残っていれば止める
+GOAL_LEFTOVER=$(grep -o '{{[^}]*}}' "$GOAL" | sort -u || true)
+if [[ -n "$GOAL_LEFTOVER" ]]; then
+  echo "$GOAL に未置換のプレースホルダが残っています（雛形のままです）:" >&2
+  echo "$GOAL_LEFTOVER" >&2
+  exit 1
+fi
 
 # 見出しだけでは足りない。無制限運用の安全性は 2 つの手順の実体に依存する
 if [[ "$MAX" -eq 0 ]]; then
@@ -42,6 +58,25 @@ if [[ "$MAX" -eq 0 ]]; then
     exit 1
   fi
 fi
+
+# 周回は ralph-loop プラグインの Stop hook が回す。プラグインが無いと 1 周目で黙って終わるので、state を作る前に止める
+RALPH_PLUGIN="ralph-loop@claude-plugins-official"
+command -v jq >/dev/null 2>&1 || { echo "jq が見つかりません（brew install jq で入れてください）" >&2; exit 1; }
+ralph_plugin_enabled() {
+  local settings
+  # Claude Code と同じく、優先度の高い設定（ローカル → プロジェクト → ユーザー）から見て、
+  # このプラグインの値を最初に持つファイルで決める（上位の false を下位の true で覆さない）
+  for settings in ".claude/settings.local.json" ".claude/settings.json" "$HOME/.claude/settings.json"; do
+    [[ -f "$settings" ]] || continue
+    if jq -e --arg plugin "$RALPH_PLUGIN" '.enabledPlugins | has($plugin)' "$settings" >/dev/null 2>&1; then
+      jq -e --arg plugin "$RALPH_PLUGIN" '.enabledPlugins[$plugin] == true' "$settings" >/dev/null 2>&1
+      return
+    fi
+  done
+  return 1
+}
+ralph_plugin_enabled \
+  || { echo "Claude Code の ${RALPH_PLUGIN} が有効になっていません（claude plugin install ${RALPH_PLUGIN} で入れてください）" >&2; exit 1; }
 
 cat > "$STATE" <<STATE_EOF
 ---
@@ -61,6 +96,9 @@ $PLAYBOOK を読み、そこに書かれた手順を厳密に実行する。1ス
 STATE_EOF
 
 echo "未完了タスク $TASKS 件 / 上限 $([[ "$MAX" -eq 0 ]] && echo '無制限' || echo "$MAX") / 完了語 $PROMISE"
+echo
+echo "注意: この制御用 worktree の中で、ほかの Claude Code セッションを開いたり cd したりしないこと。"
+echo "      Stop hook に捕まり、そのセッションがループ本体として扱われる。"
 echo
 echo "起動コマンド（スロットのパスは環境に合わせて調整）:"
 echo "  claude --add-dir ../\$(basename \$PWD | sed 's/-ctl\$/-a/') \\"

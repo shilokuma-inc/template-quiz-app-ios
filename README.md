@@ -189,7 +189,8 @@ UI の見た目が変わる変更では、Before / After のスクリーンシ�
         ├── build.yml         # 全ブランチの push / Fork からの PR
         ├── archive.yml       # main の push
         ├── upload.yml        # develop / release/** の push
-        └── cleanup-assets-branch.yml # PR マージ時に assets/issue-<番号> ブランチを削除
+        ├── cleanup-assets-branch.yml # PR マージ時に assets/issue-<番号> ブランチを削除
+        └── close-goal-discussion.yml # epic の最終 PR のマージ時にゴール元の Discussion を閉じる
 ```
 
 - プロジェクトはフォルダ同期グループ（Xcode 16 以降の形式）で管理しているため、ファイルの追加・削除で pbxproj は変わりません

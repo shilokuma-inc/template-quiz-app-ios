@@ -122,7 +122,7 @@ scripts/rename.sh MyApp
 | `DEVELOPMENT_TEAM` | Apple Developer Program の Team ID |
 | `APP_BUNDLE_IDENTIFIER` | アプリ本体の Bundle Identifier。テストターゲットは `.Tests` / `.UITests` を付けて自動で派生します |
 | `APP_DISPLAY_NAME` | ホーム画面に表示するアプリ名。アプリ内のタイトルにも使います |
-| `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` | アプリのバージョン / ビルド番号 |
+| `MARKETING_VERSION` | アプリのバージョン。ビルド番号（`CURRENT_PROJECT_VERSION`）は Upload のときに App Store Connect の最新ビルドを見て Xcode が自動で増やすため、手で上げる必要はありません |
 | `IPHONEOS_DEPLOYMENT_TARGET` | 最低サポート OS |
 
 ### 4. GitHub Secrets を設定する

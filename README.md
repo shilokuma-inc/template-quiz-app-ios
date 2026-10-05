@@ -90,6 +90,7 @@ Quiz App Template for iOS (SwiftUI)
 5. `Assets.xcassets/Theme` の `ThemePrimary` / `ThemeBackground` / `ThemeSurface`（と `AccentColor`）、`AppIcon` を差し替える
    - ホーム上部の画像を変えるときは画像を追加して `heroImageName` に指定します
 6. 広告を出す場合は `AdProvider` を実装して `ads` に渡す（[docs/architecture.md](docs/architecture.md#広告)）
+   - トラッキングする場合は [PrivacyInfo.xcprivacy](QuizTemplateApp/PrivacyInfo.xcprivacy) の `NSPrivacyTracking` も更新します
 7. シミュレータで一通り操作し、テストが通ることを確認してリリースする
 
 ## テンプレートの使い方
@@ -209,6 +210,7 @@ UI の見た目が変わる変更では、Before / After のスクリーンシ�
 - プロジェクトはフォルダ同期グループ（Xcode 16 以降の形式）で管理しているため、ファイルの追加・削除で pbxproj は変わりません
 - SwiftLint は Build Tool Plugin として全ターゲットに適用され、CI では `swiftlint lint --strict` としても実行されます。ルールは [.swiftlint.yml](.swiftlint.yml) で管理します
 - CI のワークフローは `*.xcodeproj` の名前と同名の共有スキームが存在することを前提にしています
+- [QuizTemplateApp/PrivacyInfo.xcprivacy](QuizTemplateApp/PrivacyInfo.xcprivacy) はプライバシーマニフェストです。学習記録・設定の保存に使う UserDefaults だけを申告しています。広告でトラッキングする・データを収集するなどの変更をしたら、ここと App Store Connect の「App のプライバシー」を更新してください
 
 ## License
 

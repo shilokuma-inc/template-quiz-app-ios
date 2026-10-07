@@ -11,7 +11,7 @@ Quiz App Template for iOS (SwiftUI)
 - iOS 17.0 以上
 - Swift 6（Swift 6 言語モード / Strict Concurrency）
 - SwiftUI / Swift Testing / XCTest（UI テスト）
-- SwiftLint 0.65.1（Build Tool Plugin）
+- SwiftLint 0.65.1（Build Tool Plugin。バイナリだけを配布する [SwiftLintPlugins](https://github.com/SimplyDanny/SwiftLintPlugins) 経由）
 
 ## Status
 
@@ -86,7 +86,7 @@ scripts/rename.sh MyApp
 |---|---|
 | `DEVELOPMENT_TEAM` | Apple Developer Program の Team ID |
 | `APP_BUNDLE_IDENTIFIER` | アプリ本体の Bundle Identifier。テストターゲットは `.Tests` / `.UITests` を付けて自動で派生します |
-| `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` | アプリのバージョン / ビルド番号 |
+| `MARKETING_VERSION` | アプリのバージョン。ビルド番号（`CURRENT_PROJECT_VERSION`）は Upload のときに App Store Connect の最新ビルドを見て Xcode が自動で増やすため、手で上げる必要はありません |
 | `IPHONEOS_DEPLOYMENT_TARGET` | 最低サポート OS |
 
 ### 4. GitHub Secrets を設定する
@@ -102,31 +102,43 @@ Archive / Upload ワークフローは App Store Connect API Key で認証しま
 | `APPLE_API_ISSUER_ID` | API Key の Issuer ID |
 
 API Key は App Store Connect の「ユーザとアクセス → 統合 → App Store Connect API」で、App Manager 以上の権限で発行します。
-アップロード先のアプリは事前に App Store Connect に登録しておいてください。
 
-### 5. ブランチ運用と CI
+### 5. App Store Connect にアプリを作成する
+
+Bundle ID・証明書・プロビジョニングプロファイルは、Export のときに API Key で自動的に作成されます（`-allowProvisioningUpdates`）。
+App Store Connect でのアプリ作成だけは API で行えないため、Web 画面で行います。
+
+アプリを作らずに `develop` へ push しても問題ありません。Upload ワークフローがアップロードの前にアプリの有無を確認し（[.github/scripts/check-app-store-app.rb](.github/scripts/check-app-store-app.rb)）、アプリが無ければ「新規アプリ」画面に入力する値（名前・バンドル ID・SKU など）を Job Summary に表示して止まります。表示された値でアプリを作成してから、ワークフローを再実行してください。
+
+SKU は Bundle ID と同じ値にします。SKU はユーザーには見えない社内用の ID で、後から変更できないため、迷わないようにルールを固定しています。
+
+### 6. ブランチ運用と CI
 
 | ブランチ | Build（ビルド + テスト + SwiftLint） | Archive（IPA Export） | Upload（App Store Connect） |
 |---|:-:|:-:|:-:|
 | `main` | ✅ | ✅ | |
 | `develop` | ✅ | | ✅ |
 | `release/**` | ✅ | | ✅ |
-| その他の作業ブランチ | ✅ | | |
-| `assets/**`（スクリーンショット置き場） | | | |
+| その他の作業ブランチ | ✅（Unit テストのみ） | | |
+| Pull Request の作成時（opened / reopened / ready_for_review） | ✅ | | |
 | Fork からの Pull Request | ✅ | | |
+| `assets/**`（PR 用スクリーンショット置き場） | | | |
 
 - Upload は Archive → IPA Export を含むため、`develop` / `release/**` では Archive を別途実行しません
-- `assets/**` はアプリのコードを含まないため、どのワークフローも実行しません
-- リポジトリ変数（Settings → Secrets and variables → Actions → Variables）に `ENABLE_DELIVERY=false` を設定すると Archive / Upload をスキップします。テンプレートリポジトリ自身はこの設定で配信を止めています。テンプレートから作成したリポジトリには引き継がれないため、何もしなければ従来どおり実行されます
+- Archive / Upload は Actions タブから手動でも実行できます（Run workflow）。作業ブランチを TestFlight で確認したいときは、Upload を手動実行してそのブランチを選びます
+- リポジトリ変数（Settings → Secrets and variables → Actions → Variables）に `ENABLE_DELIVERY=false` を設定すると Upload をスキップします（Archive は App Store Connect にアプリが無くても通るため止めません）。テンプレートリポジトリ自身はこの設定でアップロードを止めています。テンプレートから作成したリポジトリには引き継がれないため、何もしなければ従来どおり実行されます
+- ドキュメントだけの変更（`**/*.md`、`docs/**`）では Build を実行しません。Upload（`develop` / `release/**` への push）と Archive（`main` への push）は、ドキュメントだけの変更でも実行します
+- 作業ブランチへの push では、時間のかかる UI テスト（`<プロジェクト名>UITests`）を省いて Unit テストだけ実行します。UI テストは Pull Request の作成時と `main` / `develop` / `release/**` への push で実行します。Fork からの Pull Request は push で実行されないため、更新（synchronize）を含むすべてのイベントで UI テストまで実行します
 - Xcode のバージョンは [.github/workflows/_build.yml](.github/workflows/_build.yml) と [.github/workflows/_archive.yml](.github/workflows/_archive.yml) の `xcode-version` で固定しています。Environment の更新時はあわせて変更してください
 
-### 6. PR 本文のスクリーンショット
+### 7. PR 本文のスクリーンショット
 
 UI の見た目が変わる変更では、Before / After のスクリーンショットを PR 本文に添付します。
 
 - 画像は PR の diff を汚さないよう **`assets/issue-<Issue番号>` ブランチ**に置き、PR 本文からは raw URL で参照します
   - 例: `https://raw.githubusercontent.com/<owner>/<repo>/assets/issue-12/12/before.png`
-  - このブランチは [.github/workflows/cleanup-assets-branch.yml](.github/workflows/cleanup-assets-branch.yml) が PR のマージ時に自動削除します。ブランチ名がこの規約から外れると削除されないので注意してください
+  - このブランチは [.github/workflows/cleanup-assets-branch.yml](.github/workflows/cleanup-assets-branch.yml) が PR のマージ時に自動削除します。削除するのは、PR 本文の行頭（箇条書きの `- ` は可）にある `resolve #<Issue番号>`（`resolves` / `resolved`・`close` 系・`fix` 系でも可）と番号が一致するブランチだけです。PR テンプレートの「関連するISSUE」の書き方のままで条件を満たします。これらのキーワードが行頭に無い場合や、ブランチ名がこの規約から外れる場合は削除されないので注意してください
+  - 削除後は PR 本文の画像が表示されなくなります。画像はレビューのためのもので、マージ後に残す必要はないという前提です。残したい画像は、マージ前に Issue や PR のコメントへ直接添付してください
 - Before / After は表で横に並べ、同一条件（同じ端末・OS・外観モード・データ状態）で撮影します
 - 影響する画面が複数ある場合は画面ごとに用意します。新規画面で Before が無い場合は「なし」と書きます
 
@@ -145,6 +157,7 @@ UI の見た目が変わる変更では、Before / After のスクリーンシ�
 └── .github/
     ├── ISSUE_TEMPLATE/       # Issue テンプレート
     ├── pull_request_template.md
+    ├── scripts/              # check-app-store-app.rb（App Store Connect のアプリの有無を確認）
     └── workflows/
         ├── _build.yml        # 共通処理: ビルド + テスト + SwiftLint（workflow_call）
         ├── _archive.yml      # 共通処理: Archive → Export（→ Upload）（workflow_call）
@@ -157,6 +170,7 @@ UI の見た目が変わる変更では、Before / After のスクリーンシ�
 - プロジェクトはフォルダ同期グループ（Xcode 16 以降の形式）で管理しているため、ファイルの追加・削除で pbxproj は変わりません
 - SwiftLint は Build Tool Plugin として全ターゲットに適用され、CI では `swiftlint lint --strict` としても実行されます。ルールは [.swiftlint.yml](.swiftlint.yml) で管理します
 - CI のワークフローは `*.xcodeproj` の名前と同名の共有スキームが存在することを前提にしています
+- [QuizTemplateApp/PrivacyInfo.xcprivacy](QuizTemplateApp/PrivacyInfo.xcprivacy) はプライバシーマニフェストです。UserDefaults（`@AppStorage`）の利用だけを申告しています。データの収集・トラッキング・ほかの理由の申告が必要な API を足したら、ここと App Store Connect の「App のプライバシー」を更新してください
 
 ## License
 

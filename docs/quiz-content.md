@@ -36,7 +36,7 @@ CI:     CSV と quiz.json のずれ・問題データの誤りを検出
 | `id` | ✅ | 問題の ID。半角英数字・`-`・`_` のみ。**一度公開したら変更しない** | `prefectures-001` |
 | `category_id` | ✅ | `categories.csv` の `id` | `prefectures` |
 | `question` | ✅ | 問題文 | `日本で面積が最も大きい都道府県は？` |
-| `choice_1` 〜 `choice_6` | ✅（1・2） | 選択肢。2〜6 個。使わない列は空にする | `北海道` |
+| `choice_1` 〜 `choice_6` | ✅（1・2） | 選択肢。2〜6 個。`choice_1` から詰めて入力し、使わない列（末尾）は空にする。途中の列を空けるとエラー | `北海道` |
 | `answer` | ✅ | 正解の選択肢の **番号**（1〜6） | `2` |
 | `explanation` | | 解説（回答後と結果画面に表示） | `北海道は約 8.3 万 km² で…` |
 | `image` | | 問題に添える画像名（開発側で Asset Catalog に登録したもの） | `hokkaido_map` |

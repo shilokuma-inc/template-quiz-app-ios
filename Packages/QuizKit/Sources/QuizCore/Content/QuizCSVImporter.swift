@@ -94,9 +94,16 @@ public enum QuizCSVImporter {
             return []
         }
         return table.rows.compactMap { row in
-            let choices = (1...maxChoiceCount)
-                .map { row[QuestionColumn.choice($0)] }
-                .filter { !$0.isEmpty }
+            // 途中の空の列を詰めると answer の番号が別の選択肢を指してしまうため、詰めずにエラーにする。
+            // 使わない列は末尾だけ空にできる
+            let choiceCells = (1...maxChoiceCount).map { row[QuestionColumn.choice($0)] }
+            let filledCount = (choiceCells.lastIndex { !$0.isEmpty } ?? -1) + 1
+            let choices = Array(choiceCells.prefix(filledCount))
+            if let gap = choices.firstIndex(where: \.isEmpty) {
+                let message = "\(QuestionColumn.choice(gap + 1)) が空のまま後ろの列に選択肢があります。選択肢は choice_1 から詰めて入力してください"
+                issues.append(Issue(file: file, line: row.line, message: message))
+                return nil
+            }
 
             let answerText = row[QuestionColumn.answer]
             // 全角数字（「２」など）で入力されることがあるため半角に直して読む

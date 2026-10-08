@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4FA0000000000000000000F3 /* QuizUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4FA0000000000000000000F2 /* QuizUI */; };
+		4FA0000000000000000000F5 /* QuizCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4FA0000000000000000000F4 /* QuizCore */; };
+		4FA0000000000000000000F7 /* QuizCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4FA0000000000000000000F6 /* QuizCore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4FC9E1FA2BF1049C00F630AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -68,6 +74,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FA0000000000000000000F3 /* QuizUI in Frameworks */,
+				4FA0000000000000000000F5 /* QuizCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FA0000000000000000000F7 /* QuizCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +148,10 @@
 				4FA0000000000000000000B1 /* QuizTemplateApp */,
 			);
 			name = QuizTemplateApp;
+			packageProductDependencies = (
+				4FA0000000000000000000F2 /* QuizUI */,
+				4FA0000000000000000000F4 /* QuizCore */,
+			);
 			productName = QuizTemplateApp;
 			productReference = 4FC9E1E92BF1049B00F630AB /* QuizTemplateApp.app */;
 			productType = "com.apple.product-type.application";
@@ -161,6 +174,9 @@
 				4FA0000000000000000000B2 /* QuizTemplateAppTests */,
 			);
 			name = QuizTemplateAppTests;
+			packageProductDependencies = (
+				4FA0000000000000000000F6 /* QuizCore */,
+			);
 			productName = QuizTemplateAppTests;
 			productReference = 4FC9E1F92BF1049C00F630AB /* QuizTemplateAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -221,6 +237,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				4FA0000000000000000000F1 /* XCLocalSwiftPackageReference "Packages/QuizKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4FC9E1EA2BF1049B00F630AB /* Products */;
@@ -592,6 +609,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		4FA0000000000000000000F1 /* XCLocalSwiftPackageReference "Packages/QuizKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/QuizKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -618,6 +642,18 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		4FA0000000000000000000F2 /* QuizUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = QuizUI;
+		};
+		4FA0000000000000000000F4 /* QuizCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = QuizCore;
+		};
+		4FA0000000000000000000F6 /* QuizCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = QuizCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -5,6 +5,7 @@
 excluded:
   - .build
   - DerivedData
+  - Packages/QuizKit/.build
   - Configs
   - "**/Package.swift"
 

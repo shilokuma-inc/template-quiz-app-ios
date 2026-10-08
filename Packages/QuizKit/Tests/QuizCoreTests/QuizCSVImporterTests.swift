@@ -58,4 +58,21 @@ struct QuizCSVImporterTests {
             ]
         }
     }
+
+    @Test
+    func reportsEmptyChoiceBeforeFilledChoice() {
+        // choice_2 を空けたケース。詰めると answer の 3 が「C」ではなく「D」を指してしまう
+        let questionsCSV = """
+            id,category_id,question,choice_1,choice_2,choice_3,choice_4,answer
+            q1,fruit,問題,A,,C,D,3
+            """
+        #expect {
+            try QuizCSVImporter.makePack(categoriesCSV: categoriesCSV, questionsCSV: questionsCSV)
+        } throws: { error in
+            let issues = (error as? QuizCSVImporter.ImportError)?.issues ?? []
+            return issues.map(\.description) == [
+                "questions.csv:2: choice_2 が空のまま後ろの列に選択肢があります。選択肢は choice_1 から詰めて入力してください"
+            ]
+        }
+    }
 }

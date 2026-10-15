@@ -1,0 +1,307 @@
+{
+  "categories" : [
+    {
+      "iconSystemName" : "map",
+      "id" : "prefectures",
+      "name" : "都道府県",
+      "summary" : "面積・県庁所在地など都道府県の基本"
+    },
+    {
+      "iconSystemName" : "mountain.2",
+      "id" : "nature",
+      "name" : "山・川・湖",
+      "summary" : "日本の地形と自然"
+    },
+    {
+      "iconSystemName" : "building.columns",
+      "id" : "heritage",
+      "name" : "日本の世界遺産",
+      "summary" : "文化遺産と自然遺産"
+    }
+  ],
+  "questions" : [
+    {
+      "answerIndex" : 1,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "岩手県",
+        "北海道",
+        "福島県",
+        "長野県"
+      ],
+      "explanation" : "北海道は約 8.3 万 km² で、2 位の岩手県の 5 倍以上の広さがあります。",
+      "id" : "prefectures-001",
+      "text" : "日本で面積が最も大きい都道府県は？"
+    },
+    {
+      "answerIndex" : 2,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "大阪府",
+        "東京都",
+        "香川県",
+        "沖縄県"
+      ],
+      "explanation" : "最も小さいのは香川県で、2 番目に小さいのは大阪府です。",
+      "id" : "prefectures-002",
+      "text" : "日本で面積が最も小さい都道府県は？"
+    },
+    {
+      "answerIndex" : 3,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "千葉県",
+        "静岡県",
+        "三重県",
+        "栃木県"
+      ],
+      "explanation" : "内陸県は栃木・群馬・埼玉・山梨・長野・岐阜・滋賀・奈良の 8 県です。",
+      "id" : "prefectures-003",
+      "text" : "海に面していない県（内陸県）はどれ？"
+    },
+    {
+      "answerIndex" : 0,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "香川県",
+        "秋田県",
+        "群馬県",
+        "徳島県"
+      ],
+      "explanation" : "香川県は讃岐うどんにちなみ「うどん県」として PR しています。",
+      "id" : "prefectures-004",
+      "text" : "「うどん県」を名乗って観光 PR をしている県は？"
+    },
+    {
+      "answerIndex" : 1,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "鳥取県",
+        "島根県",
+        "愛媛県",
+        "山口県"
+      ],
+      "explanation" : "松江市は島根県の県庁所在地で、国宝の松江城があります。",
+      "id" : "prefectures-005",
+      "text" : "県庁所在地が「松江市」の県は？"
+    },
+    {
+      "answerIndex" : 2,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "栃木県",
+        "茨城県",
+        "群馬県",
+        "埼玉県"
+      ],
+      "id" : "prefectures-006",
+      "text" : "県庁所在地が「前橋市」の県は？"
+    },
+    {
+      "answerIndex" : 1,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "45",
+        "47",
+        "48",
+        "50"
+      ],
+      "explanation" : "1 都（東京）・1 道（北海道）・2 府（大阪・京都）・43 県の合計 47 です。",
+      "id" : "prefectures-007",
+      "text" : "都道府県の数は全部でいくつ？"
+    },
+    {
+      "answerIndex" : 3,
+      "categoryId" : "prefectures",
+      "choices" : [
+        "沖縄市",
+        "名護市",
+        "浦添市",
+        "那覇市"
+      ],
+      "id" : "prefectures-008",
+      "text" : "沖縄県の県庁所在地は？"
+    },
+    {
+      "answerIndex" : 0,
+      "categoryId" : "nature",
+      "choices" : [
+        "富士山",
+        "北岳",
+        "奥穂高岳",
+        "槍ヶ岳"
+      ],
+      "explanation" : "富士山の標高は 3,776m。2 位は南アルプスの北岳（3,193m）です。",
+      "id" : "nature-001",
+      "text" : "日本で最も高い山は？"
+    },
+    {
+      "answerIndex" : 1,
+      "categoryId" : "nature",
+      "choices" : [
+        "利根川",
+        "信濃川",
+        "石狩川",
+        "北上川"
+      ],
+      "explanation" : "信濃川（約 367km）が最長で、2 位は利根川（約 322km）です。",
+      "id" : "nature-002",
+      "text" : "日本で最も長い川は？"
+    },
+    {
+      "answerIndex" : 2,
+      "categoryId" : "nature",
+      "choices" : [
+        "信濃川",
+        "石狩川",
+        "利根川",
+        "淀川"
+      ],
+      "explanation" : "利根川の流域面積は約 16,840km² で日本最大です。",
+      "id" : "nature-003",
+      "text" : "流域面積が日本で最も広い川は？"
+    },
+    {
+      "answerIndex" : 3,
+      "categoryId" : "nature",
+      "choices" : [
+        "霞ヶ浦",
+        "サロマ湖",
+        "猪苗代湖",
+        "琵琶湖"
+      ],
+      "explanation" : "琵琶湖は滋賀県にあり、県の面積の約 6 分の 1 を占めます。",
+      "id" : "nature-004",
+      "text" : "日本で最も大きい湖は？"
+    },
+    {
+      "answerIndex" : 0,
+      "categoryId" : "nature",
+      "choices" : [
+        "田沢湖",
+        "支笏湖",
+        "十和田湖",
+        "摩周湖"
+      ],
+      "explanation" : "秋田県の田沢湖は最大水深 423.4m で日本一深い湖です。",
+      "id" : "nature-005",
+      "text" : "日本で最も深い湖は？"
+    },
+    {
+      "answerIndex" : 1,
+      "categoryId" : "nature",
+      "choices" : [
+        "木曽山脈",
+        "飛騨山脈",
+        "赤石山脈",
+        "奥羽山脈"
+      ],
+      "explanation" : "北アルプスは飛騨山脈、中央アルプスは木曽山脈、南アルプスは赤石山脈です。",
+      "id" : "nature-006",
+      "text" : "「北アルプス」の正式な山脈名は？"
+    },
+    {
+      "answerIndex" : 2,
+      "categoryId" : "nature",
+      "choices" : [
+        "筑後川",
+        "吉野川",
+        "利根川",
+        "信濃川"
+      ],
+      "explanation" : "坂東太郎（利根川）・筑紫次郎（筑後川）・四国三郎（吉野川）をあわせて日本三大暴れ川と呼びます。",
+      "id" : "nature-007",
+      "text" : "「坂東太郎」の異名を持つ川は？"
+    },
+    {
+      "answerIndex" : 3,
+      "categoryId" : "heritage",
+      "choices" : [
+        "富士山",
+        "日光の社寺",
+        "厳島神社",
+        "姫路城"
+      ],
+      "explanation" : "1993 年に法隆寺地域の仏教建造物・姫路城・屋久島・白神山地の 4 件が登録されました。",
+      "id" : "heritage-001",
+      "text" : "1993 年に日本で初めて世界遺産に登録されたものは？"
+    },
+    {
+      "answerIndex" : 0,
+      "categoryId" : "heritage",
+      "choices" : [
+        "富山県",
+        "石川県",
+        "福井県",
+        "長野県"
+      ],
+      "explanation" : "白川郷は岐阜県、五箇山は富山県にあります。",
+      "id" : "heritage-002",
+      "text" : "「白川郷・五箇山の合掌造り集落」は岐阜県とどの県にまたがる？"
+    },
+    {
+      "answerIndex" : 1,
+      "categoryId" : "heritage",
+      "choices" : [
+        "山口県",
+        "広島県",
+        "岡山県",
+        "島根県"
+      ],
+      "id" : "heritage-003",
+      "text" : "世界遺産「厳島神社」がある県は？"
+    },
+    {
+      "answerIndex" : 2,
+      "categoryId" : "heritage",
+      "choices" : [
+        "自然遺産",
+        "複合遺産",
+        "文化遺産"
+      ],
+      "explanation" : "2013 年に「富士山－信仰の対象と芸術の源泉」として文化遺産に登録されました。",
+      "id" : "heritage-004",
+      "text" : "富士山は世界遺産のどの区分で登録された？"
+    },
+    {
+      "answerIndex" : 3,
+      "categoryId" : "heritage",
+      "choices" : [
+        "鳥取県",
+        "山口県",
+        "兵庫県",
+        "島根県"
+      ],
+      "id" : "heritage-005",
+      "text" : "世界遺産「石見銀山遺跡とその文化的景観」がある県は？"
+    },
+    {
+      "answerIndex" : 0,
+      "categoryId" : "heritage",
+      "choices" : [
+        "北海道",
+        "青森県",
+        "秋田県",
+        "岩手県"
+      ],
+      "explanation" : "知床は 2005 年に世界自然遺産に登録されました。",
+      "id" : "heritage-006",
+      "text" : "世界自然遺産「知床」がある都道府県は？"
+    },
+    {
+      "answerIndex" : 3,
+      "categoryId" : "heritage",
+      "choices" : [
+        "屋久島",
+        "白神山地",
+        "小笠原諸島",
+        "上記すべて"
+      ],
+      "explanation" : "屋久島と白神山地は 1993 年、小笠原諸島は 2011 年に登録されました。",
+      "id" : "heritage-007",
+      "keepsChoiceOrder" : true,
+      "text" : "次のうち、日本の世界自然遺産に登録されているものは？"
+    }
+  ],
+  "schemaVersion" : 1
+}

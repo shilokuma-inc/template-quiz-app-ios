@@ -14,6 +14,11 @@ DEVELOPMENT_TEAM = XU74X3434S
 // テストターゲットは $(APP_BUNDLE_IDENTIFIER).Tests / .UITests として派生させる
 APP_BUNDLE_IDENTIFIER = jp.shilokuma.QuizTemplateApp
 
+// ホーム画面に表示するアプリ名（CFBundleDisplayName）。
+// アプリ内のホーム画面のタイトルも、AppConfiguration.swift で上書きしない限りこの値を使う
+APP_DISPLAY_NAME = 日本地理クイズ
+INFOPLIST_KEY_CFBundleDisplayName = $(APP_DISPLAY_NAME)
+
 // バージョン（CFBundleShortVersionString / CFBundleVersion）
 MARKETING_VERSION = 1.0.0
 CURRENT_PROJECT_VERSION = 1

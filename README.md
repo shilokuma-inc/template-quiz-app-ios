@@ -58,6 +58,40 @@ Quiz App Template for iOS (SwiftUI)
   </table>
 </div>
 
+## このテンプレートでできること
+
+アプリの大枠（画面・出題ロジック・成績・設定・広告の差し込み口）は共通の Swift Package **QuizKit** が持ち、
+**問題データ（CSV）とテーマ（色・文言・画像）を差し替えるだけ**で別のクイズアプリとしてリリースできます。
+
+| ホーム | 出題 | 結果 | 設定 |
+|---|---|---|---|
+| カテゴリ別の習得状況、ランダム出題、間違えた問題の復習 | 選択肢シャッフル、正誤フィードバック、解説、振動 | 正答率、ふりかえり、間違えた問題に再挑戦 | 出題数、シャッフル、振動、学習記録のリセット、各種リンク |
+
+アプリごとに差し替えるのは次の 4 か所だけです。設計の詳細は [docs/architecture.md](docs/architecture.md) を参照してください。
+
+| 差し替える場所 | 内容 |
+|---|---|
+| [Content/](Content)（`categories.csv` / `questions.csv`） | 問題・カテゴリ。外部委託で作成してもらう（入稿ルール: [docs/quiz-content.md](docs/quiz-content.md)） |
+| [QuizTemplateApp/AppConfiguration.swift](QuizTemplateApp/AppConfiguration.swift) | キャッチコピー・テーマ・出題数・プライバシーポリシー等のリンク・広告 |
+| [QuizTemplateApp/Assets.xcassets](QuizTemplateApp/Assets.xcassets) | テーマカラー（`Theme/`）・アプリアイコン・画像 |
+| [Configs/Project.xcconfig](Configs/Project.xcconfig) | Bundle ID・アプリ名（`APP_DISPLAY_NAME`）・バージョン |
+
+## 新しいクイズアプリの作り方
+
+1. 下記「テンプレートの使い方」の 1〜5 でリポジトリ・署名・Secrets・App Store Connect のアプリを用意する
+2. [Configs/Project.xcconfig](Configs/Project.xcconfig) の `APP_DISPLAY_NAME` をアプリ名にする
+3. [Content/](Content) の CSV を納品された問題に差し替え、変換する
+   ```bash
+   scripts/import-quiz.sh
+   ```
+   エラーが出たら行番号を見て CSV を直します。生成された `QuizTemplateApp/Resources/quiz.json` もコミットします
+4. [AppConfiguration.swift](QuizTemplateApp/AppConfiguration.swift) のキャッチコピー・リンク・出題数を書き換える
+   - プライバシーポリシーの URL は App Store の審査で必須です
+5. `Assets.xcassets/Theme` の `ThemePrimary` / `ThemeBackground` / `ThemeSurface`（と `AccentColor`）、`AppIcon` を差し替える
+   - ホーム上部の画像を変えるときは画像を追加して `heroImageName` に指定します
+6. 広告を出す場合は `AdProvider` を実装して `ads` に渡す（[docs/architecture.md](docs/architecture.md#広告)）
+7. シミュレータで一通り操作し、テストが通ることを確認してリリースする
+
 ## テンプレートの使い方
 
 ### 1. リポジトリを作成する
@@ -73,7 +107,8 @@ GitHub の「Use this template」からリポジトリを作成し、clone し�
 scripts/rename.sh MyApp
 ```
 
-- アプリ名は英字で始まる英数字のみです（Swift のモジュール名になります）
+- アプリ名は英字で始まる英数字のみです（Swift のモジュール名になります）。ホーム画面に表示するアプリ名は `APP_DISPLAY_NAME` で別に指定します
+- 共通部分の `Packages/QuizKit` は名前を変えません
 - README のバッジ URL に使うリポジトリ名は `origin` から推定します。別のものを使う場合は第 2 引数で `owner/repo` を渡します
 - 作業ツリーがクリーンな状態で実行し、実行後に `git diff` で差分を確認してコミットしてください
 
@@ -86,6 +121,7 @@ scripts/rename.sh MyApp
 |---|---|
 | `DEVELOPMENT_TEAM` | Apple Developer Program の Team ID |
 | `APP_BUNDLE_IDENTIFIER` | アプリ本体の Bundle Identifier。テストターゲットは `.Tests` / `.UITests` を付けて自動で派生します |
+| `APP_DISPLAY_NAME` | ホーム画面に表示するアプリ名。アプリ内のタイトルにも使います |
 | `MARKETING_VERSION` | アプリのバージョン。ビルド番号（`CURRENT_PROJECT_VERSION`）は Upload のときに App Store Connect の最新ビルドを見て Xcode が自動で増やすため、手で上げる必要はありません |
 | `IPHONEOS_DEPLOYMENT_TARGET` | 最低サポート OS |
 
@@ -114,7 +150,7 @@ SKU は Bundle ID と同じ値にします。SKU はユーザーには見えな�
 
 ### 6. ブランチ運用と CI
 
-| ブランチ | Build（ビルド + テスト + SwiftLint） | Archive（IPA Export） | Upload（App Store Connect） |
+| ブランチ | Build（ビルド + テスト + SwiftLint + 問題データの検証） | Archive（IPA Export） | Upload（App Store Connect） |
 |---|:-:|:-:|:-:|
 | `main` | ✅ | ✅ | |
 | `develop` | ✅ | | ✅ |
@@ -146,13 +182,15 @@ UI の見た目が変わる変更では、Before / After のスクリーンシ�
 
 ```
 .
-├── Configs/                  # xcconfig（署名情報・バージョン・Deployment Target）
-├── QuizTemplateApp/          # アプリ本体（SwiftUI）
-├── QuizTemplateAppTests/     # Unit テスト（Swift Testing）
+├── Configs/                  # xcconfig（署名情報・アプリ名・バージョン・Deployment Target）
+├── Content/                  # 問題の原本（categories.csv / questions.csv）
+├── Packages/QuizKit/         # クイズの共通部分（QuizCore / QuizUI / quiz-tool）
+├── QuizTemplateApp/          # アプリ本体。AppConfiguration.swift・Assets・Resources/quiz.json（生成物）
+├── QuizTemplateAppTests/     # Unit テスト（Swift Testing）。同梱した問題データの検証を含む
 ├── QuizTemplateAppUITests/   # UI テスト（XCTest）
-├── QuizTemplateApp.xcodeproj # 共有スキーム QuizTemplateApp を含む
-├── docs/                     # ExportOptions.plist のサンプル
-├── scripts/                  # rename.sh
+├── QuizTemplateApp.xcodeproj # 共有スキーム QuizTemplateApp を含む（QuizCoreTests も実行する）
+├── docs/                     # 設計・問題の入稿ルール・ExportOptions.plist のサンプル
+├── scripts/                  # rename.sh / import-quiz.sh
 ├── .swiftlint.yml            # SwiftLint 設定
 └── .github/
     ├── ISSUE_TEMPLATE/       # Issue テンプレート

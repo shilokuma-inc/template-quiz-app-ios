@@ -1,6 +1,15 @@
 {
-  "originHash" : "1fa961aa1dc717cea452f3389668f0f99a254f07e4eb11d190768a53798f744f",
+  "originHash" : "a94be497bfdad997f5997197c3d5ece003124b8358b1a17106822dbed876f2c4",
   "pins" : [
+    {
+      "identity" : "quiz-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shilokuma-inc/quiz-kit",
+      "state" : {
+        "revision" : "c834669b905c4b24022da085a83a0abf5bb687fa",
+        "version" : "0.1.2"
+      }
+    },
     {
       "identity" : "swiftlintplugins",
       "kind" : "remoteSourceControl",

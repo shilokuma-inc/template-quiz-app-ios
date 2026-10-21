@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4FB00000000000000000A021 /* QuizCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4FB00000000000000000A011 /* QuizCore */; };
+		4FB00000000000000000A022 /* QuizUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4FB00000000000000000A012 /* QuizUI */; };
+		4FB00000000000000000A023 /* QuizGameCenter in Frameworks */ = {isa = PBXBuildFile; productRef = 4FB00000000000000000A013 /* QuizGameCenter */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4FC9E1FA2BF1049C00F630AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -68,6 +74,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FB00000000000000000A021 /* QuizCore in Frameworks */,
+				4FB00000000000000000A022 /* QuizUI in Frameworks */,
+				4FB00000000000000000A023 /* QuizGameCenter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +148,11 @@
 				4FA0000000000000000000B1 /* QuizTemplateApp */,
 			);
 			name = QuizTemplateApp;
+			packageProductDependencies = (
+				4FB00000000000000000A011 /* QuizCore */,
+				4FB00000000000000000A012 /* QuizUI */,
+				4FB00000000000000000A013 /* QuizGameCenter */,
+			);
 			productName = QuizTemplateApp;
 			productReference = 4FC9E1E92BF1049B00F630AB /* QuizTemplateApp.app */;
 			productType = "com.apple.product-type.application";
@@ -216,11 +230,13 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 4FC9E1E02BF1049B00F630AB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				4FB00000000000000000A001 /* XCRemoteSwiftPackageReference "quiz-kit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4FC9E1EA2BF1049B00F630AB /* Products */;
@@ -601,6 +617,14 @@
 				minimumVersion = 0.65.1;
 			};
 		};
+		4FB00000000000000000A001 /* XCRemoteSwiftPackageReference "quiz-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shilokuma-inc/quiz-kit";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.1.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -618,6 +642,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		4FB00000000000000000A011 /* QuizCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4FB00000000000000000A001 /* XCRemoteSwiftPackageReference "quiz-kit" */;
+			productName = QuizCore;
+		};
+		4FB00000000000000000A012 /* QuizUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4FB00000000000000000A001 /* XCRemoteSwiftPackageReference "quiz-kit" */;
+			productName = QuizUI;
+		};
+		4FB00000000000000000A013 /* QuizGameCenter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4FB00000000000000000A001 /* XCRemoteSwiftPackageReference "quiz-kit" */;
+			productName = QuizGameCenter;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -74,6 +74,11 @@ enum AppConfig {
         )
     }
 
+    /// 難易度ごとの候補（出しうる問題）の数。練習で選べる問題数はこれを超えない
+    static func questionPoolSize(for difficulty: Difficulty) -> Int {
+        makeGenerator(items: QuizContent.items, difficulty: difficulty).items.count
+    }
+
     // MARK: - ランキング
 
     /// `.none`（出さない）/ `.local`（端末の中で自分と競う）/ `.localAndGameCenter`（Game Center でも競う）

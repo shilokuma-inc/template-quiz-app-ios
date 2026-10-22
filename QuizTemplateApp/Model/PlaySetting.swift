@@ -93,6 +93,28 @@ struct PlaySetting: Hashable, Sendable {
         questionCount: AppConfig.defaultQuestionCount
     )
 
+    /// 練習で選べる問題数。同じ問題を出さないよう、難易度の候補の数（むずかしいは 17 件など）を超える問題数は外す
+    ///
+    /// すべて外れたときは、候補の数をそのまま 1 つだけ選べるようにする。
+    static func questionCounts(for difficulty: Difficulty) -> [Int] {
+        questionCounts(poolSize: AppConfig.questionPoolSize(for: difficulty))
+    }
+
+    /// 候補が `poolSize` 件のときに選べる問題数
+    static func questionCounts(poolSize: Int) -> [Int] {
+        let counts = AppConfig.questionCounts.filter { $0 <= poolSize }
+        return counts.isEmpty ? [poolSize] : counts
+    }
+
+    /// 難易度を変えたあとも選べる問題数にそろえたもの。選べなくなったら、選べる中でいちばん多い問題数にする
+    func adjustingQuestionCount() -> PlaySetting {
+        let counts = Self.questionCounts(for: difficulty)
+        guard !counts.contains(questionCount) else { return self }
+        var setting = self
+        setting.questionCount = counts.last { $0 <= questionCount } ?? counts[0]
+        return setting
+    }
+
     /// ランキングの枠。モード × 難易度（練習は問題数も）ごとに分ける
     var leaderboardKey: String {
         switch mode {

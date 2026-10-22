@@ -17,7 +17,12 @@ struct RankingView: View {
     @State private var isGameCenterPresented = false
 
     init(initialSetting: PlaySetting) {
-        _setting = State(initialValue: initialSetting)
+        _setting = State(initialValue: initialSetting.adjustingQuestionCount())
+    }
+
+    /// いまの難易度で選べる問題数
+    private var questionCounts: [Int] {
+        PlaySetting.questionCounts(for: setting.difficulty)
     }
 
     var body: some View {
@@ -30,8 +35,8 @@ struct RankingView: View {
                     if AppConfig.difficulties.count > 1 {
                         QuizOptionPicker(AppConfig.difficulties, selection: $setting.difficulty) { Text($0.title) }
                     }
-                    if setting.mode == .practice, AppConfig.questionCounts.count > 1 {
-                        QuizOptionPicker(AppConfig.questionCounts, selection: $setting.questionCount) { Text("\($0)") }
+                    if setting.mode == .practice, questionCounts.count > 1 {
+                        QuizOptionPicker(questionCounts, selection: $setting.questionCount) { Text("\($0)") }
                     }
                     LocalLeaderboardView(records: LocalLeaderboard().records(forKey: setting.leaderboardKey))
 
@@ -49,6 +54,9 @@ struct RankingView: View {
                 .padding(theme.spacing)
             }
             .background(theme.background.ignoresSafeArea())
+            .onChange(of: setting.difficulty) {
+                setting = setting.adjustingQuestionCount()
+            }
             .navigationTitle(Text("Ranking"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

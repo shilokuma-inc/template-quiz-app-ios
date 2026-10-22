@@ -13,6 +13,11 @@ struct HomeView: View {
     @State private var path: [PlaySetting] = []
     @State private var isRankingPresented = false
 
+    /// いまの難易度で選べる問題数
+    private var questionCounts: [Int] {
+        PlaySetting.questionCounts(for: setting.difficulty)
+    }
+
     var body: some View {
         NavigationStack(path: $path) {
             VStack(spacing: theme.spacing * 1.5) {
@@ -38,9 +43,9 @@ struct HomeView: View {
                         QuizOptionPicker(AppConfig.difficulties, selection: $setting.difficulty) { Text($0.title) }
                     }
                 }
-                if setting.mode == .practice, AppConfig.questionCounts.count > 1 {
+                if setting.mode == .practice, questionCounts.count > 1 {
                     section("Questions") {
-                        QuizOptionPicker(AppConfig.questionCounts, selection: $setting.questionCount) { Text("\($0)") }
+                        QuizOptionPicker(questionCounts, selection: $setting.questionCount) { Text("\($0)") }
                     }
                 }
 
@@ -70,6 +75,9 @@ struct HomeView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(theme.background.ignoresSafeArea())
             .animation(.snappy, value: setting.mode)
+            .onChange(of: setting.difficulty) {
+                setting = setting.adjustingQuestionCount()
+            }
             .navigationDestination(for: PlaySetting.self) { setting in
                 PlayView(setting: setting)
             }

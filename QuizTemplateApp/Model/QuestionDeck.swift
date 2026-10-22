@@ -13,6 +13,11 @@ final class QuestionDeck {
     static let batchSize = 10
 
     private var generator: ChoiceQuestionGenerator<QuizItem, String, String>
+
+    /// 出しうる問題の数
+    var poolSize: Int {
+        generator.items.count
+    }
     private var random: any RandomNumberGenerator
 
     init(setting: PlaySetting, items: [QuizItem] = QuizContent.items, seed: UInt64? = nil) {
@@ -30,7 +35,9 @@ final class QuestionDeck {
         let deck = QuestionDeck(setting: setting, seed: seed)
         switch setting.mode {
         case .practice:
-            return QuizSession(questions: deck.next(count: setting.questionCount), rules: setting.mode.rules)
+            // 候補より多く作ると同じ問題が重なるので、候補の数で止める（ホームでもそれを超える問題数は選ばせない）
+            let count = min(setting.questionCount, deck.poolSize)
+            return QuizSession(questions: deck.next(count: count), rules: setting.mode.rules)
         case .timeAttack:
             return QuizSession(
                 questions: deck.next(count: batchSize),

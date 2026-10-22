@@ -62,6 +62,31 @@ struct QuizContentTests {
         #expect(timeAttack.rules.timeLimitSeconds == 30)
     }
 
+    @Test("選べる問題数なら同じ問題を出さない", arguments: Difficulty.allCases)
+    func noDuplicatePromptsInPractice(difficulty: Difficulty) {
+        let counts = PlaySetting.questionCounts(for: difficulty)
+        #expect(!counts.isEmpty)
+        for count in counts {
+            #expect(count <= AppConfig.questionPoolSize(for: difficulty))
+            let session = QuestionDeck.makeSession(setting: PlaySetting(mode: .practice, difficulty: difficulty, questionCount: count))
+            #expect(session.questions.count == count)
+            #expect(Set(session.questions.map(\.prompt)).count == count)
+        }
+    }
+
+    @Test("候補より多い問題数は外し、難易度を変えたら選べる問題数にそろえる")
+    func questionCountsFollowPoolSize() {
+        // むずかしいの候補は 17 件なので、20 問は選べない
+        #expect(PlaySetting.questionCounts(for: .hard) == [5, 10])
+        #expect(PlaySetting.questionCounts(for: .normal) == AppConfig.questionCounts)
+        #expect(PlaySetting.questionCounts(poolSize: 3) == [3])
+
+        let hard = PlaySetting(mode: .practice, difficulty: .hard, questionCount: 20).adjustingQuestionCount()
+        #expect(hard.questionCount == 10)
+        let normal = PlaySetting(mode: .practice, difficulty: .normal, questionCount: 20).adjustingQuestionCount()
+        #expect(normal.questionCount == 20)
+    }
+
     @Test("ランキングの枠はモード・難易度・問題数で分かれる")
     func leaderboardKeysAreDistinct() {
         let keys = Set(AppConfig.modes.flatMap { mode in

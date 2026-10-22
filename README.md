@@ -5,6 +5,15 @@ Quiz App Template for iOS (SwiftUI)
 クイズアプリを量産するための GitHub テンプレートリポジトリです。
 [template-app-ios](https://github.com/shilokuma-inc/template-app-ios) をベースに、SwiftUI のプロジェクト一式と、ビルド・テスト・Archive・TestFlight 配信までの GitHub Actions ワークフローを含みます。
 
+出題・進行・スコア・ランキング・標準画面は [QuizKit](https://github.com/shilokuma-inc/quiz-kit)（Swift Package）が持ちます。
+新しいクイズアプリで書き換えるのは、次の 3 つだけです（「9. 新しいクイズアプリにする」）。
+
+- `QuizTemplateApp/AppConfig.swift`
+- `QuizTemplateApp/Content/`
+- `AppStore/`
+
+雛形の中身は、都道府県 → 県庁所在地の 4 択クイズ（47 件・日本語 / 英語）です。
+
 ## Environment
 
 - Xcode 26.6
@@ -216,12 +225,93 @@ API が無い・アカウントで一度だけ行うなど、ワークフロー�
 
 流す順は、`Metadata/App Store` を dry-run で実行して Job Summary の差分を確かめ → `dry_run` を外して実行 → 最後に出る「審査に出す前に App Store Connect で入力が要るもの」を App Store Connect で埋める、です。
 
+### 9. 新しいクイズアプリにする
+
+1〜5 の手順でリポジトリを用意したら、次の順で中身を差し替えます。
+
+**1. データセット（`QuizTemplateApp/Content/quiz-items.json`）**
+
+1 件が 1 問の元になる表です。都道府県の例は次の列を持ちます。
+
+| 列 | 中身 |
+|---|---|
+| `id` | 通し番号 |
+| `name` | 問題として見せる値 |
+| `answer` | 正解。選択肢に並ぶ値 |
+| `group` | 誤答を選ぶときのまとまり |
+| `level` | 難しさ |
+
+- `name` / `answer` は、`AppStore/languages.json` の言語（ja / en）ごとに書きます
+- 国旗クイズなら、`name` に国旗の画像名、`answer` に国名、`group` に地域を入れます
+- 列を足すときは [QuizTemplateApp/Content/QuizItem.swift](QuizTemplateApp/Content/QuizItem.swift) にも足します
+- 件数を変えたら、`QuizTemplateAppTests/QuizContentTests.swift` の件数も合わせます
+
+**2. 設定（[QuizTemplateApp/AppConfig.swift](QuizTemplateApp/AppConfig.swift)）**
+
+| 項目 | 内容 |
+|---|---|
+| `theme` | 色・書体・角丸・間隔（QuizKit の `QuizTheme`） |
+| `title` / `subtitle` | ホームに出すアプリ名とひとこと |
+| `promptView` | 問題の見せ方。画像を見せるクイズは `Image(question.prompt)` にする |
+| `choiceCount` | 選択肢の数（2 択・3 択・4 択…）。並べ方は数に合わせて変わる（2 は横、3 は縦、4 以上は 2 列） |
+| `questionCounts` / `defaultQuestionCount` | 練習で選べる問題数 |
+| `modes` | 練習 / タイムアタック（秒数）。1 つだけなら選択を出さない |
+| `difficulties` | 選べる難易度。1 つだけなら選択を出さない |
+| `makeGenerator` | 難易度ごとの出題の作り方（後述） |
+| `ranking` | `.none`（出さない）/ `.local`（端末の中で自分と競う）/ `.localAndGameCenter(leaderboardIDPrefix:)`（Game Center でも競う） |
+
+`makeGenerator` では、難易度ごとに次の 3 つを決めます。
+
+- データセットのどの列を問題・答えにするか
+- どの行を出すか
+- 誤答をどう選ぶか
+
+都道府県の例は次のとおりです。
+
+| 難易度 | 出す行 | 誤答 |
+|---|---|---|
+| やさしい | 全件 | ランダムに選ぶ |
+| ふつう | 全件 | 同じ地方から選ぶ |
+| むずかしい | 県名と違う名前の市だけ | 同じ地方から選ぶ |
+
+文言（モード名・ボタン）は `QuizTemplateApp/Localizable.xcstrings` で翻訳します。
+
+**3. 見た目をさらに変えたいとき**
+
+| 変えたいもの | 変える場所 |
+|---|---|
+| 問題の見せ方・選択肢の並べ方 | `AppConfig.promptView` と、[QuizTemplateApp/Screens/PlayView.swift](QuizTemplateApp/Screens/PlayView.swift) の `QuizPlayView` に渡す `layout` / `choiceLabel` / `status` |
+| 画面の構成そのもの | `Screens/` の画面を書き換える。進行は `QuizSession` を観察するだけで動く（QuizKit の README の「見た目の差し替え」） |
+
+**4. Game Center のランキング（使うときだけ）**
+
+1. `AppConfig.ranking` を `.localAndGameCenter(leaderboardIDPrefix: "<Bundle ID>.")` にする
+2. Xcode の Signing & Capabilities で Game Center を足す
+3. App Store Connect でリーダーボードを作る。ID は `<leaderboardIDPrefix><PlaySetting.leaderboardKey>`（`.` は `_`）で、例は `<Bundle ID>.practice_10_normal` / `<Bundle ID>.timeAttack30_hard`
+
+**5. 広告**
+
+テンプレートには広告を入れていません。子ども向けのアプリでも使えるようにするためです。広告を出すアプリだけが SDK を足し、次の 3 つを更新します。
+
+- PrivacyInfo
+- `AppStore/app_info.json` の年齢制限（`advertising`）
+- App のプライバシー
+
+**6. 掲載情報（`AppStore/`）**
+
+「8. App Store の掲載情報」の手順で書き換えます。撮影モードの画面は `QuizTemplateApp/Screenshot/ScreenshotDemo.swift` にあります（ホーム・出題中・結果）。
+
 ## 構成
 
 ```
 .
 ├── Configs/                  # xcconfig（署名情報・バージョン・Deployment Target）
 ├── QuizTemplateApp/          # アプリ本体（SwiftUI）
+│   ├── AppConfig.swift       #   アプリごとの設定（見た目・出題・ランキング）
+│   ├── Content/              #   データセット（quiz-items.json）と、その型
+│   ├── Model/                #   モード・難易度・1 プレイの出題（QuizKit への橋渡し）
+│   ├── Screens/              #   ホーム・出題と結果・ランキング（QuizUI の標準画面で組む）
+│   └── Screenshot/           #   撮影モード
 ├── QuizTemplateAppTests/     # Unit テスト（Swift Testing）
 ├── QuizTemplateAppUITests/   # UI テスト（XCTest）
 ├── QuizTemplateApp.xcodeproj # 共有スキーム QuizTemplateApp を含む

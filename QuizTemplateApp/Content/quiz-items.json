@@ -1,0 +1,622 @@
+{
+ "_comment": [
+  "出題に使うデータセット（都道府県 → 県庁所在地）。1 件 = 1 問の元。",
+  "name: 問題として見せる値 / answer: 正解（選択肢に並ぶ値）。どちらも言語ごとに書く（AppStore/languages.json の言語）",
+  "group: 誤答を選ぶときのまとまり（ふつう・むずかしいでは同じ group から誤答を選ぶ）",
+  "level: 1 = 県名と同じ名前の市（やさしい）/ 2 = 県名と違う名前の市（むずかしいで出す）",
+  "別のクイズにするときは、この形のまま中身を差し替え、AppConfig.swift の makeGenerator で使う列と難易度ごとの条件を決める"
+ ],
+ "items": [
+  {
+   "id": 1,
+   "name": {
+    "ja": "北海道",
+    "en": "Hokkaido"
+   },
+   "answer": {
+    "ja": "札幌市",
+    "en": "Sapporo"
+   },
+   "group": "hokkaido",
+   "level": 2
+  },
+  {
+   "id": 2,
+   "name": {
+    "ja": "青森県",
+    "en": "Aomori"
+   },
+   "answer": {
+    "ja": "青森市",
+    "en": "Aomori"
+   },
+   "group": "tohoku",
+   "level": 1
+  },
+  {
+   "id": 3,
+   "name": {
+    "ja": "岩手県",
+    "en": "Iwate"
+   },
+   "answer": {
+    "ja": "盛岡市",
+    "en": "Morioka"
+   },
+   "group": "tohoku",
+   "level": 2
+  },
+  {
+   "id": 4,
+   "name": {
+    "ja": "宮城県",
+    "en": "Miyagi"
+   },
+   "answer": {
+    "ja": "仙台市",
+    "en": "Sendai"
+   },
+   "group": "tohoku",
+   "level": 2
+  },
+  {
+   "id": 5,
+   "name": {
+    "ja": "秋田県",
+    "en": "Akita"
+   },
+   "answer": {
+    "ja": "秋田市",
+    "en": "Akita"
+   },
+   "group": "tohoku",
+   "level": 1
+  },
+  {
+   "id": 6,
+   "name": {
+    "ja": "山形県",
+    "en": "Yamagata"
+   },
+   "answer": {
+    "ja": "山形市",
+    "en": "Yamagata"
+   },
+   "group": "tohoku",
+   "level": 1
+  },
+  {
+   "id": 7,
+   "name": {
+    "ja": "福島県",
+    "en": "Fukushima"
+   },
+   "answer": {
+    "ja": "福島市",
+    "en": "Fukushima"
+   },
+   "group": "tohoku",
+   "level": 1
+  },
+  {
+   "id": 8,
+   "name": {
+    "ja": "茨城県",
+    "en": "Ibaraki"
+   },
+   "answer": {
+    "ja": "水戸市",
+    "en": "Mito"
+   },
+   "group": "kanto",
+   "level": 2
+  },
+  {
+   "id": 9,
+   "name": {
+    "ja": "栃木県",
+    "en": "Tochigi"
+   },
+   "answer": {
+    "ja": "宇都宮市",
+    "en": "Utsunomiya"
+   },
+   "group": "kanto",
+   "level": 2
+  },
+  {
+   "id": 10,
+   "name": {
+    "ja": "群馬県",
+    "en": "Gunma"
+   },
+   "answer": {
+    "ja": "前橋市",
+    "en": "Maebashi"
+   },
+   "group": "kanto",
+   "level": 2
+  },
+  {
+   "id": 11,
+   "name": {
+    "ja": "埼玉県",
+    "en": "Saitama"
+   },
+   "answer": {
+    "ja": "さいたま市",
+    "en": "Saitama"
+   },
+   "group": "kanto",
+   "level": 1
+  },
+  {
+   "id": 12,
+   "name": {
+    "ja": "千葉県",
+    "en": "Chiba"
+   },
+   "answer": {
+    "ja": "千葉市",
+    "en": "Chiba"
+   },
+   "group": "kanto",
+   "level": 1
+  },
+  {
+   "id": 13,
+   "name": {
+    "ja": "東京都",
+    "en": "Tokyo"
+   },
+   "answer": {
+    "ja": "東京",
+    "en": "Tokyo"
+   },
+   "group": "kanto",
+   "level": 1
+  },
+  {
+   "id": 14,
+   "name": {
+    "ja": "神奈川県",
+    "en": "Kanagawa"
+   },
+   "answer": {
+    "ja": "横浜市",
+    "en": "Yokohama"
+   },
+   "group": "kanto",
+   "level": 2
+  },
+  {
+   "id": 15,
+   "name": {
+    "ja": "新潟県",
+    "en": "Niigata"
+   },
+   "answer": {
+    "ja": "新潟市",
+    "en": "Niigata"
+   },
+   "group": "chubu",
+   "level": 1
+  },
+  {
+   "id": 16,
+   "name": {
+    "ja": "富山県",
+    "en": "Toyama"
+   },
+   "answer": {
+    "ja": "富山市",
+    "en": "Toyama"
+   },
+   "group": "chubu",
+   "level": 1
+  },
+  {
+   "id": 17,
+   "name": {
+    "ja": "石川県",
+    "en": "Ishikawa"
+   },
+   "answer": {
+    "ja": "金沢市",
+    "en": "Kanazawa"
+   },
+   "group": "chubu",
+   "level": 2
+  },
+  {
+   "id": 18,
+   "name": {
+    "ja": "福井県",
+    "en": "Fukui"
+   },
+   "answer": {
+    "ja": "福井市",
+    "en": "Fukui"
+   },
+   "group": "chubu",
+   "level": 1
+  },
+  {
+   "id": 19,
+   "name": {
+    "ja": "山梨県",
+    "en": "Yamanashi"
+   },
+   "answer": {
+    "ja": "甲府市",
+    "en": "Kofu"
+   },
+   "group": "chubu",
+   "level": 2
+  },
+  {
+   "id": 20,
+   "name": {
+    "ja": "長野県",
+    "en": "Nagano"
+   },
+   "answer": {
+    "ja": "長野市",
+    "en": "Nagano"
+   },
+   "group": "chubu",
+   "level": 1
+  },
+  {
+   "id": 21,
+   "name": {
+    "ja": "岐阜県",
+    "en": "Gifu"
+   },
+   "answer": {
+    "ja": "岐阜市",
+    "en": "Gifu"
+   },
+   "group": "chubu",
+   "level": 1
+  },
+  {
+   "id": 22,
+   "name": {
+    "ja": "静岡県",
+    "en": "Shizuoka"
+   },
+   "answer": {
+    "ja": "静岡市",
+    "en": "Shizuoka"
+   },
+   "group": "chubu",
+   "level": 1
+  },
+  {
+   "id": 23,
+   "name": {
+    "ja": "愛知県",
+    "en": "Aichi"
+   },
+   "answer": {
+    "ja": "名古屋市",
+    "en": "Nagoya"
+   },
+   "group": "chubu",
+   "level": 2
+  },
+  {
+   "id": 24,
+   "name": {
+    "ja": "三重県",
+    "en": "Mie"
+   },
+   "answer": {
+    "ja": "津市",
+    "en": "Tsu"
+   },
+   "group": "kinki",
+   "level": 2
+  },
+  {
+   "id": 25,
+   "name": {
+    "ja": "滋賀県",
+    "en": "Shiga"
+   },
+   "answer": {
+    "ja": "大津市",
+    "en": "Otsu"
+   },
+   "group": "kinki",
+   "level": 2
+  },
+  {
+   "id": 26,
+   "name": {
+    "ja": "京都府",
+    "en": "Kyoto"
+   },
+   "answer": {
+    "ja": "京都市",
+    "en": "Kyoto"
+   },
+   "group": "kinki",
+   "level": 1
+  },
+  {
+   "id": 27,
+   "name": {
+    "ja": "大阪府",
+    "en": "Osaka"
+   },
+   "answer": {
+    "ja": "大阪市",
+    "en": "Osaka"
+   },
+   "group": "kinki",
+   "level": 1
+  },
+  {
+   "id": 28,
+   "name": {
+    "ja": "兵庫県",
+    "en": "Hyogo"
+   },
+   "answer": {
+    "ja": "神戸市",
+    "en": "Kobe"
+   },
+   "group": "kinki",
+   "level": 2
+  },
+  {
+   "id": 29,
+   "name": {
+    "ja": "奈良県",
+    "en": "Nara"
+   },
+   "answer": {
+    "ja": "奈良市",
+    "en": "Nara"
+   },
+   "group": "kinki",
+   "level": 1
+  },
+  {
+   "id": 30,
+   "name": {
+    "ja": "和歌山県",
+    "en": "Wakayama"
+   },
+   "answer": {
+    "ja": "和歌山市",
+    "en": "Wakayama"
+   },
+   "group": "kinki",
+   "level": 1
+  },
+  {
+   "id": 31,
+   "name": {
+    "ja": "鳥取県",
+    "en": "Tottori"
+   },
+   "answer": {
+    "ja": "鳥取市",
+    "en": "Tottori"
+   },
+   "group": "chugoku",
+   "level": 1
+  },
+  {
+   "id": 32,
+   "name": {
+    "ja": "島根県",
+    "en": "Shimane"
+   },
+   "answer": {
+    "ja": "松江市",
+    "en": "Matsue"
+   },
+   "group": "chugoku",
+   "level": 2
+  },
+  {
+   "id": 33,
+   "name": {
+    "ja": "岡山県",
+    "en": "Okayama"
+   },
+   "answer": {
+    "ja": "岡山市",
+    "en": "Okayama"
+   },
+   "group": "chugoku",
+   "level": 1
+  },
+  {
+   "id": 34,
+   "name": {
+    "ja": "広島県",
+    "en": "Hiroshima"
+   },
+   "answer": {
+    "ja": "広島市",
+    "en": "Hiroshima"
+   },
+   "group": "chugoku",
+   "level": 1
+  },
+  {
+   "id": 35,
+   "name": {
+    "ja": "山口県",
+    "en": "Yamaguchi"
+   },
+   "answer": {
+    "ja": "山口市",
+    "en": "Yamaguchi"
+   },
+   "group": "chugoku",
+   "level": 1
+  },
+  {
+   "id": 36,
+   "name": {
+    "ja": "徳島県",
+    "en": "Tokushima"
+   },
+   "answer": {
+    "ja": "徳島市",
+    "en": "Tokushima"
+   },
+   "group": "shikoku",
+   "level": 1
+  },
+  {
+   "id": 37,
+   "name": {
+    "ja": "香川県",
+    "en": "Kagawa"
+   },
+   "answer": {
+    "ja": "高松市",
+    "en": "Takamatsu"
+   },
+   "group": "shikoku",
+   "level": 2
+  },
+  {
+   "id": 38,
+   "name": {
+    "ja": "愛媛県",
+    "en": "Ehime"
+   },
+   "answer": {
+    "ja": "松山市",
+    "en": "Matsuyama"
+   },
+   "group": "shikoku",
+   "level": 2
+  },
+  {
+   "id": 39,
+   "name": {
+    "ja": "高知県",
+    "en": "Kochi"
+   },
+   "answer": {
+    "ja": "高知市",
+    "en": "Kochi"
+   },
+   "group": "shikoku",
+   "level": 1
+  },
+  {
+   "id": 40,
+   "name": {
+    "ja": "福岡県",
+    "en": "Fukuoka"
+   },
+   "answer": {
+    "ja": "福岡市",
+    "en": "Fukuoka"
+   },
+   "group": "kyushu",
+   "level": 1
+  },
+  {
+   "id": 41,
+   "name": {
+    "ja": "佐賀県",
+    "en": "Saga"
+   },
+   "answer": {
+    "ja": "佐賀市",
+    "en": "Saga"
+   },
+   "group": "kyushu",
+   "level": 1
+  },
+  {
+   "id": 42,
+   "name": {
+    "ja": "長崎県",
+    "en": "Nagasaki"
+   },
+   "answer": {
+    "ja": "長崎市",
+    "en": "Nagasaki"
+   },
+   "group": "kyushu",
+   "level": 1
+  },
+  {
+   "id": 43,
+   "name": {
+    "ja": "熊本県",
+    "en": "Kumamoto"
+   },
+   "answer": {
+    "ja": "熊本市",
+    "en": "Kumamoto"
+   },
+   "group": "kyushu",
+   "level": 1
+  },
+  {
+   "id": 44,
+   "name": {
+    "ja": "大分県",
+    "en": "Oita"
+   },
+   "answer": {
+    "ja": "大分市",
+    "en": "Oita"
+   },
+   "group": "kyushu",
+   "level": 1
+  },
+  {
+   "id": 45,
+   "name": {
+    "ja": "宮崎県",
+    "en": "Miyazaki"
+   },
+   "answer": {
+    "ja": "宮崎市",
+    "en": "Miyazaki"
+   },
+   "group": "kyushu",
+   "level": 1
+  },
+  {
+   "id": 46,
+   "name": {
+    "ja": "鹿児島県",
+    "en": "Kagoshima"
+   },
+   "answer": {
+    "ja": "鹿児島市",
+    "en": "Kagoshima"
+   },
+   "group": "kyushu",
+   "level": 1
+  },
+  {
+   "id": 47,
+   "name": {
+    "ja": "沖縄県",
+    "en": "Okinawa"
+   },
+   "answer": {
+    "ja": "那覇市",
+    "en": "Naha"
+   },
+   "group": "kyushu",
+   "level": 2
+  }
+ ]
+}

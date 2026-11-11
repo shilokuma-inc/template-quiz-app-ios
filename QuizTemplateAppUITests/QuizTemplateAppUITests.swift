@@ -13,11 +13,23 @@ final class QuizTemplateAppUITests: XCTestCase {
         continueAfterFailure = false
     }
 
+    /// ホームから始めて 1 問答えると、2 問目に進む
     @MainActor
-    func testLaunchShowsContentView() throws {
+    func testStartAndAnswerFirstQuestion() throws {
         let app = XCUIApplication()
+        app.launchArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
 
-        XCTAssertTrue(app.staticTexts["Hello, world!"].waitForExistence(timeout: 5))
+        let start = app.buttons["start"]
+        XCTAssertTrue(start.waitForExistence(timeout: 5))
+        start.tap()
+
+        XCTAssertTrue(app.staticTexts["1 / 10"].waitForExistence(timeout: 5))
+        // 選択肢は「What is the capital of …?」の問題文の下に並ぶボタン。戻るボタン以外の最初のボタンを押す
+        let choice = app.buttons.matching(NSPredicate(format: "label != %@", "Back")).element(boundBy: 1)
+        XCTAssertTrue(choice.waitForExistence(timeout: 5))
+        choice.tap()
+
+        XCTAssertTrue(app.staticTexts["2 / 10"].waitForExistence(timeout: 5))
     }
 }

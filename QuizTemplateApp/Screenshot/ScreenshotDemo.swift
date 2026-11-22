@@ -13,11 +13,17 @@
 //
 
 import Foundation
+import QuizCore
 
 enum ScreenshotDemo {
     /// 撮る画面。rawValue が AppStore/screenshots.json の scene と対応する
     enum Scene: String {
+        /// ホーム
         case home
+        /// 練習の出題中（3 問目）
+        case quiz
+        /// 結果（10 問中 9 問正解・自己ベスト更新）
+        case result
     }
 
     /// 撮影モードで起動しているか
@@ -34,4 +40,39 @@ enum ScreenshotDemo {
         }
         return Scene(rawValue: arguments[index + 1])
     }()
+
+    /// 撮る出題の設定
+    static let setting = PlaySetting(mode: .practice, difficulty: .normal, questionCount: 10)
+
+    /// 撮り直しても同じ出題になるよう固定するシード
+    static let seed: UInt64 = 20_261_022
+
+    /// 1 問あたりの解答にかかったことにする秒数
+    static let elapsedSeconds: TimeInterval = 2.0
+
+    /// 練習の 3 問目。2 問を正解した状態
+    @MainActor
+    static func quizSession() -> QuizSession<Question> {
+        session(answering: 2, missing: [])
+    }
+
+    /// 練習を解き終えた結果。5 問目だけ間違えた状態
+    @MainActor
+    static func resultSession() -> QuizSession<Question> {
+        session(answering: setting.questionCount, missing: [4], isFinished: true)
+    }
+
+    /// 決まった出題を `answeredCount` 問まで解いた 1 プレイ。`missing` の問題（0 始まり）は間違える
+    @MainActor
+    static func session(answering answeredCount: Int, missing: Set<Int>, isFinished: Bool = false) -> QuizSession<Question> {
+        let session = QuestionDeck.makeSession(setting: setting, seed: seed)
+        let choices = session.questions.prefix(answeredCount).enumerated().map { index, question in
+            let choice = missing.contains(index)
+                ? question.choices.first { $0 != question.correctChoice } ?? question.correctChoice
+                : question.correctChoice
+            return (choice, elapsedSeconds: elapsedSeconds)
+        }
+        session.restore(answeredChoices: choices, isFinished: isFinished)
+        return session
+    }
 }
